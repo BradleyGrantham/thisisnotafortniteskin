@@ -9,6 +9,8 @@ from tqdm import tqdm
 
 import thisisnotafortniteskin.constants
 
+LOGGER = thisisnotafortniteskin.constants.logger
+
 
 def soupify(url: str):
     r = requests.get(url)
@@ -19,7 +21,7 @@ def soupify(url: str):
         return r.status_code
 
 
-def pages_of_skins(starting_page=1, logger=None):
+def pages_of_skins(starting_page=1):
     url = "https://fortniteskins.net/outfits/page/{}"
     page = starting_page
     page_errors = []
@@ -28,10 +30,9 @@ def pages_of_skins(starting_page=1, logger=None):
         if status_code == 200:
             yield url.format(page)
         else:
-            if logger is not None:
-                logger.warning(
-                    "{} returned status code {}".format(url.format(page), status_code)
-                )
+            LOGGER.warning(
+                "{} returned status code {}".format(url.format(page), status_code)
+            )
             page_errors.append(status_code)
         page += 1
 
@@ -64,21 +65,19 @@ def save_image_from_url(url: str, output_file: str):
 
 @click.command()
 @click.argument("save-directory")
-def crawl(save_directory: str, logger):
-    logger.info("Beginning to crawl outfit pages")
+def crawl(save_directory: str):
+    LOGGER.info("Beginning to crawl outfit pages")
     skin_page_urls = [
         skin_link
-        for url in pages_of_skins(logger=logger)
+        for url in pages_of_skins(logger=LOGGER)
         for skin_link in get_skin_links(url)
     ]
-    logger.info("Obtained {} total outfits".format(len(skin_page_urls)))
+    LOGGER.info("Obtained {} total outfits".format(len(skin_page_urls)))
 
-    logger.info("Scraping individual outfit pages and saving images")
+    LOGGER.info("Scraping individual outfit pages and saving images")
     for skin_link in tqdm(skin_page_urls):
         get_skin_png(skin_link, save_directory=save_directory)
 
 
 if __name__ == "__main__":
-
-    logger = thisisnotafortniteskin.constants.logger
     crawl()
