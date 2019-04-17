@@ -33,6 +33,7 @@ def horizontal_flip(image):
 @click.command()
 @click.argument("raw-image-directory")
 @click.argument("augmented-save-directory")
+@click.option("--number-of-rgb-shifts", default=40)
 def perform_augmentations(raw_image_directory, augmented_save_directory,
                           number_of_rgb_shifts=40):
     LOGGER.info("Finding images")
