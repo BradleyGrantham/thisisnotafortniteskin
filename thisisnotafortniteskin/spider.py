@@ -67,9 +67,13 @@ def save_image_from_url(url: str, output_file: str):
 @click.argument("save-directory")
 def crawl(save_directory: str):
     LOGGER.info("Beginning to crawl outfit pages")
+    if not os.path.exists(save_directory):
+        LOGGER.info("Creating save directory")
+        os.makedirs(save_directory, exist_ok=True)
+
     skin_page_urls = [
         skin_link
-        for url in pages_of_skins(logger=LOGGER)
+        for url in pages_of_skins()
         for skin_link in get_skin_links(url)
     ]
     LOGGER.info("Obtained {} total outfits".format(len(skin_page_urls)))

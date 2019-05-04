@@ -1,0 +1,10 @@
+requests>=2.21.0
+beautifulsoup4>=4.7.1
+tqdm>=4.31.1
+matplotlib>=3.0.3
+numpy==1.16.2
+Click>=7.0
+albumentations==0.2.2
+opencv-python
+torch==1.0.1.post2
+torchvision==0.2.2

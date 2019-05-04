@@ -36,6 +36,9 @@ def horizontal_flip(image):
 @click.option("--number-of-rgb-shifts", default=40)
 def perform_augmentations(raw_image_directory, augmented_save_directory,
                           number_of_rgb_shifts=40):
+    if not os.path.exists(augmented_save_directory):
+        LOGGER.info("Creating save directory")
+        os.makedirs(augmented_save_directory, exist_ok=True)
     LOGGER.info("Finding images")
     image_paths = glob.glob(os.path.join(raw_image_directory, "*"))
 
